@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Dev_bloggr.Models;
+using Microsoft.Identity.Client;
 
 
 namespace Dev_bloggr.DataAccess.Data
@@ -12,10 +13,16 @@ namespace Dev_bloggr.DataAccess.Data
             : base(options)
         {
         }
-
+        public DbSet<Blog> Blogs { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //CONFIGURE  BLOGS TABLE
+            builder.Entity<Blog>().HasOne(b => b.User).WithMany().HasForeignKey(b => b.UserId);
+
+
+            //CONFIGURE IDENTITY TABLES
             builder.HasDefaultSchema("Identity");
             builder.Entity<ApplicationUser>(entity =>
             {
