@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dev_bloggr.Models
+namespace Dev_bloggr.Models.BusinessModels
 {
     public class Blog
     {

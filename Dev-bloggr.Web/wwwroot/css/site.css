@@ -20,3 +20,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.submenu:hover {
+    background-color: #353b40; 
+    font-weight: bold;
+}
+
+
+
+
+
+
+

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Dev_bloggr.Models;
 using Microsoft.Identity.Client;
-
+using Dev_bloggr.Models.BusinessModels;
 
 namespace Dev_bloggr.DataAccess.Data
 {

@@ -1,0 +1,58 @@
+﻿@model Dev_bloggr.Models.ViewModels.CreateBlogViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="container">
+    <form method="post">
+        <input asp-for="Id" hidden />
+        <div class="row">
+            <div class="col-10">
+                <div class="border p-3 mt-4">
+                    <div class="row pb-2">
+                        <h2>Create Blog</h2>
+                        <hr />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label "></label>
+                        <input asp-for="Title" class="form-control"  aria-required="true" placeholder="How to add Identity to ASP.NET" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Header" class="form-label"></label>
+                        <input asp-for="Header" class="form-control"  aria-required="true" placeholder="Tutorial for begginers" />
+                        <span asp-validation-for="Header" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Content" class="form-label"></label>
+                        <textarea id="markdown-editor" asp-for="Content" class="form-control" aria-required="true" placeholder=""></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-2">
+                        <button class="btn btn-primary form-control ">Create blog</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+        </form>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("markdown-editor"),
+            // Additional configuration options go here
+        });
+    </script>
+}
