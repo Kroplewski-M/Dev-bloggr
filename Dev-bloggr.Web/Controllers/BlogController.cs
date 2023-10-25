@@ -24,6 +24,7 @@ namespace Dev_bloggr.Web.Controllers
         [Authorize]
         public IActionResult UpsertBlog(int? id)
         {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var blogViewModel = new CreateBlogViewModel();
             
             if (id == null || id == 0)
@@ -33,13 +34,24 @@ namespace Dev_bloggr.Web.Controllers
             else
             {
                 var blog = _db.Blogs.FirstOrDefault(u => u.Id == id);
-                blogViewModel.Id = blog.Id;
-                blogViewModel.Title = blog.Title;
-                blogViewModel.Header = blog.Header;
-                blogViewModel.Content = blog.Content;
-                blogViewModel.CreatedAt = blog.CreatedAt;
-                blogViewModel.UserId = blog.UserId;
-                return View(blogViewModel);
+                if (blog != null)
+                {
+                    if (blog.UserId != userId)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    blogViewModel.Id = blog.Id;
+                    blogViewModel.Title = blog.Title;
+                    blogViewModel.Header = blog.Header;
+                    blogViewModel.Content = blog.Content;
+                    blogViewModel.CreatedAt = blog.CreatedAt;
+                    blogViewModel.UserId = blog.UserId;
+                    return View(blogViewModel);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
         }
         [Authorize]
@@ -83,7 +95,10 @@ namespace Dev_bloggr.Web.Controllers
 
         public IActionResult YourBlogs()
         {
-            return View();
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            IEnumerable<Blog>blogs = _db.Blogs.Where(u=>u.UserId == userId).Include(b => b.User).ToList();
+
+            return View(blogs);
         }
     }
 }

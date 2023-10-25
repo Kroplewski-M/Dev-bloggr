@@ -13,8 +13,9 @@
             <div class="col-10">
                 <div class="border p-3 mt-4">
                     <div class="row pb-2">
-                        <h2>Create Blog</h2>
-                        <hr />
+                        <a asp-controller="Blog" asp-action="Index" class="btn btn-primary col-2 mb-3 ms-2" > Back</a>
+                        <h2>@(Model.Id != 0 ? "Update" : "Create") Blog</h2>
+                        <hr/>
                     </div>
                     <div class="mb-3">
                         <label asp-for="Title" class="form-label "></label>
