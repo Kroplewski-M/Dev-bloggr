@@ -11,50 +11,74 @@ namespace Dev_bloggr.Web.Controllers
     public class BlogController: Controller
     {
         private readonly ApplicationDbContext _db;
-        public BlogController(ApplicationDbContext db)
+        private readonly ILogger<BlogController> _logger;
+        public BlogController(ApplicationDbContext db, ILogger<BlogController> logger)
         {
             _db = db;
+            _logger = logger;
         }
         public IActionResult Index()
         {
             return View();
         }
         [Authorize]
-        public IActionResult CreateBlog()
+        public IActionResult UpsertBlog(int? id)
         {
-            return View();
+            var blogViewModel = new CreateBlogViewModel();
+            
+            if (id == null || id == 0)
+            {
+                return View(blogViewModel);
+            }
+            else
+            {
+                var blog = _db.Blogs.FirstOrDefault(u => u.Id == id);
+                blogViewModel.Id = blog.Id;
+                blogViewModel.Title = blog.Title;
+                blogViewModel.Header = blog.Header;
+                blogViewModel.Content = blog.Content;
+                blogViewModel.CreatedAt = blog.CreatedAt;
+                blogViewModel.UserId = blog.UserId;
+                return View(blogViewModel);
+            }
         }
         [Authorize]
         [HttpPost]
-        public IActionResult CreateBlog(CreateBlogViewModel blog)
+        public IActionResult UpsertBlog(CreateBlogViewModel blog)
         {
-            if (String.IsNullOrEmpty(blog.Content))
+            if (string.IsNullOrEmpty(blog.Content))
             {
                 return View();
             }
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-                if (userId != null)
+                var blogInfo = new Blog
                 {
-                    var blogInfo = new Blog
+                    Title = blog.Title,
+                    Header = blog.Header,
+                    Content = blog.Content,
+                    UserId = userId // Set the UserId property to associate the Blog with the user.
+                };
+                if (blog.Id == 0 || blog.Id == null)
+                {
+                    if (userId != null)
                     {
-                        Title = blog.Title,
-                        Header = blog.Header,
-                        Content = blog.Content,
-                        CreatedAt = DateTime.Now,
-                        UserId = userId // Set the UserId property to associate the Blog with the user.
-                    };
-                    _db.Blogs.Add(blogInfo);
-                    _db.SaveChanges();
+                        blogInfo.CreatedAt = DateTime.Now;
+                        _db.Blogs.Add(blogInfo);
+                    }
                 }
+                else
+                { 
+                    blogInfo.Id = blog.Id;
+                    _db.Blogs.Update(blogInfo);
+                }
+                _db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            else
-            {
-                return View();
-            }
 
+            return View();
         }
 
         public IActionResult YourBlogs()

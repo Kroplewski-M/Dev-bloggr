@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,11 +13,11 @@ namespace Dev_bloggr.Models.ViewModels
     {
         public int Id { get; set; }
         [Required]
-        [MaxLength(30)]
+        [MaxLength(100)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(100)]
         public string Header { get; set; }
 
         [Required]
@@ -26,6 +27,7 @@ namespace Dev_bloggr.Models.ViewModels
         public DateTime CreatedAt { get; set; }
 
         // Navigation property for the user
+        [ValidateNever]
         public ApplicationUser User { get; set; }
         //Foreign key for the user
         public string UserId { get; set; }
