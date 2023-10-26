@@ -23,8 +23,8 @@
                     <p>by: @blog.User.FirstName @blog.User.LastName</p>
                     <p>published: @blog.CreatedAt.Date.ToString("d")</p>
                     <div class="d-flex mb-2">
-                        <a href="#" class="btn btn-primary me-2 rounded">View</a>
-                        <a href="#" class="btn btn-info me-2 rounded">Edit</a>
+                        <a asp-controller="Blog" asp-action="ViewBlog" asp-route-id="@blog.Id" class="btn btn-primary me-2 rounded">View</a>
+                        <a asp-controller="Blog" asp-action="UpsertBlog" asp-route-id="@blog.Id" class="btn btn-info me-2 rounded">Edit</a>
                     </div>
                         <a href="#" class="btn btn-danger rounded">Delete</a>
                 </div>

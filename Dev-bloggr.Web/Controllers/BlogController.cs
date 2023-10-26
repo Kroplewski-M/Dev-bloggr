@@ -19,7 +19,8 @@ namespace Dev_bloggr.Web.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var blogs = _db.Blogs.Include(b => b.User).ToList();
+            return View(blogs);
         }
         [Authorize]
         public IActionResult UpsertBlog(int? id)
@@ -94,13 +95,23 @@ namespace Dev_bloggr.Web.Controllers
 
             return View();
         }
-
+        [Authorize]
         public IActionResult YourBlogs()
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             IEnumerable<Blog>blogs = _db.Blogs.Where(u=>u.UserId == userId).Include(b => b.User).ToList();
 
             return View(blogs);
+        }
+
+        public IActionResult ViewBlog(int id)
+        {
+            var blog = _db.Blogs.Include(b => b.User).FirstOrDefault(u => u.Id == id);
+            if (blog == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(blog);
         }
     }
 }

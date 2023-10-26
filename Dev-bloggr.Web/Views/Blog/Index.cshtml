@@ -1,6 +1,29 @@
-﻿@*
+﻿@model List<Dev_bloggr.Models.BusinessModels.Blog>
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-<h1>Blogs</h1>
+
+<div class="container">
+    <h1>Blogs</h1>
+    <div class="d-flex flex-wrap mt-5">
+        @foreach (var blog in Model)
+        {
+            <a class="card rounded col-3 me-4 mb-3 blogCard text-decoration-none" asp-controller="blog" asp-action="ViewBlog" asp-route-id="@blog.Id">
+                <div>
+                    <div class="card-header bg-dark rounded-top">
+                        <p class="text-light fw-bold">@blog.Title</p>
+                    </div>
+                    <div class="card-body">
+                        <p>@blog.Header</p>
+                        <hr />
+                        <p>by: @blog.User.FirstName @blog.User.LastName</p>
+                        <p>published: @blog.CreatedAt.Date.ToString("d")</p>
+                                
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
