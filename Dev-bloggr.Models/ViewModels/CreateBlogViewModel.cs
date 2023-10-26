@@ -30,6 +30,7 @@ namespace Dev_bloggr.Models.ViewModels
         [ValidateNever]
         public ApplicationUser User { get; set; }
         //Foreign key for the user
+        [ValidateNever]
         public string UserId { get; set; }
 
     }

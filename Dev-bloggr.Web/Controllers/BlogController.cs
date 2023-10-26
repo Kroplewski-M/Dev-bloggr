@@ -83,6 +83,8 @@ namespace Dev_bloggr.Web.Controllers
                 else
                 { 
                     blogInfo.Id = blog.Id;
+                    blogInfo.CreatedAt = blog.CreatedAt;
+                    //SET CREATED AT
                     _db.Blogs.Update(blogInfo);
                 }
                 _db.SaveChanges();
