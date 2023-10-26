@@ -113,5 +113,26 @@ namespace Dev_bloggr.Web.Controllers
             }
             return View(blog);
         }
+        #region API CALLS
+
+        [HttpDelete]
+        public IActionResult DeleteBlog(int? id)
+        {
+            var blogToBeDeleted = _db.Blogs.FirstOrDefault(b => b.Id == id);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (blogToBeDeleted == null || blogToBeDeleted.UserId != userId)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            else
+            {
+                _db.Blogs.Remove(blogToBeDeleted);
+                _db.SaveChanges();
+                return Json(new { success = true, message = "Blog deleted" });
+            }
+        }
+
+        #endregion
     }
+
 }

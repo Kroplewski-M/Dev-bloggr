@@ -26,9 +26,42 @@
                         <a asp-controller="Blog" asp-action="ViewBlog" asp-route-id="@blog.Id" class="btn btn-primary me-2 rounded">View</a>
                         <a asp-controller="Blog" asp-action="UpsertBlog" asp-route-id="@blog.Id" class="btn btn-info me-2 rounded">Edit</a>
                     </div>
-                        <a href="#" class="btn btn-danger rounded">Delete</a>
+                    <a href="#" onclick="deleteBlog(@blog.Id)" class="btn btn-danger rounded">Delete</a>
                 </div>
             </div>
         }
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        function deleteBlog(blogId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Blog/DeleteBlog/' + blogId,
+                        type: 'DELETE',
+                        success: function (data) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your blog has been deleted.',
+                                'success'
+                            ).then(function (){
+                                location.reload();
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    </script>
+}
