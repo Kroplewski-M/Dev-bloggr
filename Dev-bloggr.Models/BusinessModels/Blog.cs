@@ -21,7 +21,5 @@ namespace Dev_bloggr.Models.BusinessModels
         //Foreign key for the user
         public string UserId { get; set; }
 
-        public ICollection<BlogComments> BlogComments { get; set; }
-
     }
 }

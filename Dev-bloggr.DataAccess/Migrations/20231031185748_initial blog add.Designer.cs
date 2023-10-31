@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dev_bloggr.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231031154727_init")]
-    partial class init
+    [Migration("20231031185748_initial blog add")]
+    partial class initialblogadd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,55 +130,6 @@ namespace Dev_bloggr.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.BlogComments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("BlogComments");
-                });
-
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -325,36 +276,6 @@ namespace Dev_bloggr.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.BlogComments", b =>
-                {
-                    b.HasOne("Dev_bloggr.Models.BusinessModels.Blog", "Blog")
-                        .WithMany("BlogComments")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Dev_bloggr.Models.BusinessModels.Comment", "Comment")
-                        .WithMany("BlogComments")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-
-                    b.Navigation("Comment");
-                });
-
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.Comment", b =>
-                {
-                    b.HasOne("Dev_bloggr.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -404,16 +325,6 @@ namespace Dev_bloggr.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.Blog", b =>
-                {
-                    b.Navigation("BlogComments");
-                });
-
-            modelBuilder.Entity("Dev_bloggr.Models.BusinessModels.Comment", b =>
-                {
-                    b.Navigation("BlogComments");
                 });
 #pragma warning restore 612, 618
         }

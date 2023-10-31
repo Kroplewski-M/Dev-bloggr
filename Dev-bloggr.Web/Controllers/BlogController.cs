@@ -27,7 +27,7 @@ namespace Dev_bloggr.Web.Controllers
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var blogViewModel = new CreateBlogViewModel();
-            
+
             if (id == null || id == 0)
             {
                 return View(blogViewModel);
@@ -82,7 +82,7 @@ namespace Dev_bloggr.Web.Controllers
                     }
                 }
                 else
-                { 
+                {
                     blogInfo.Id = blog.Id;
                     blogInfo.CreatedAt = blog.CreatedAt;
                     //SET CREATED AT
@@ -99,7 +99,7 @@ namespace Dev_bloggr.Web.Controllers
         public IActionResult YourBlogs()
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            IEnumerable<Blog>blogs = _db.Blogs.Where(u=>u.UserId == userId).Include(b => b.User).ToList();
+            IEnumerable<Blog> blogs = _db.Blogs.Where(u => u.UserId == userId).Include(b => b.User).ToList();
 
             return View(blogs);
         }
