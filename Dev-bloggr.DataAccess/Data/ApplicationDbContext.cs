@@ -14,13 +14,15 @@ namespace Dev_bloggr.DataAccess.Data
         {
         }
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Comment>Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             //CONFIGURE  BLOGS TABLE
             builder.Entity<Blog>().HasOne(b => b.User).WithMany().HasForeignKey(b => b.UserId);
-
+            builder.Entity<Comment>().HasOne(c=>c.Blog).WithMany(b=> b.Comments).HasForeignKey(c => c.BlogId);
+            builder.Entity<Comment>().HasOne(b => b.User).WithMany().HasForeignKey(b => b.UserId).OnDelete(DeleteBehavior.Restrict);
 
             //CONFIGURE IDENTITY TABLES
             //builder.HasDefaultSchema("Identity");

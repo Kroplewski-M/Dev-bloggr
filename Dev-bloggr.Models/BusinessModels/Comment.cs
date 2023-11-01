@@ -7,19 +7,15 @@ using System.Threading.Tasks;
 
 namespace Dev_bloggr.Models.BusinessModels
 {
-    public class Blog
+    public class Comment
     {
         [Key]
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Header { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        // Navigation property for the user
-        public ApplicationUser User { get; set; }
-        //Foreign key for the user
         public string UserId { get; set; }
-        public List<Comment>Comments { get; set; }
+        public ApplicationUser User { get; set; }
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
     }
 }
