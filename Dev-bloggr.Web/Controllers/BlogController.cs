@@ -111,7 +111,7 @@ namespace Dev_bloggr.Web.Controllers
                 blog = _db.Blogs.Include(b => b.User).FirstOrDefault(u => u.Id == id),
                 addComment = new AddCommentViewModel(),
             };
-            blogViewMoodel.blog.Comments = _db.Comments.Where(u=>u.BlogId == blogViewMoodel.blog.Id).ToList();
+            blogViewMoodel.blog.Comments = _db.Comments.Include(b => b.User).Where(u=>u.BlogId == blogViewMoodel.blog.Id).ToList();
 
             if (blogViewMoodel.blog == null)
             {

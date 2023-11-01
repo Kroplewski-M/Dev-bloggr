@@ -42,10 +42,26 @@
     }
     else
     {
-        @foreach (var comment in Model.blog.Comments)
-        {
-            <p>@comment.Content</p>
-        }
+        <div class="mt-5 row d-flex flex-column">
+            @foreach (var comment in Model.blog.Comments)
+            {
+                <div class="card mb-4 col-6 ">
+                    <div class="card-body">
+                        <p>@comment.Content</p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <p class="small mb-0 ms-2">by: @comment.User.FirstName @comment.User.LastName</p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <p>created at: @comment.CreatedAt.ToString("d")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
     }
 </div>
 
@@ -53,6 +69,7 @@
     <partial name="_ValidationScriptsPartial"/>
     <script>
         $(document).ready(function(){
+            //add a comment
             $("#comment-form").submit(function (event) {
                 event.preventDefault();
                 var commentModel = {
@@ -74,6 +91,7 @@
                     },
                 });
             });
+            //delete comment
         });
 </script>
 }
