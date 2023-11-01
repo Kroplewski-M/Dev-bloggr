@@ -106,13 +106,20 @@ namespace Dev_bloggr.Web.Controllers
 
         public IActionResult ViewBlog(int id)
         {
-            var blog = _db.Blogs.Include(b => b.User).FirstOrDefault(u => u.Id == id);
-            if (blog == null)
+            var blogViewMoodel = new BlogViewModel
+            {
+                blog = _db.Blogs.Include(b => b.User).FirstOrDefault(u => u.Id == id),
+                addComment = new AddCommentViewModel(),
+            };
+            blogViewMoodel.blog.Comments = _db.Comments.Where(u=>u.BlogId == blogViewMoodel.blog.Id).ToList();
+
+            if (blogViewMoodel.blog == null)
             {
                 return RedirectToAction("Index");
             }
-            return View(blog);
+            return View(blogViewMoodel);
         }
+
         #region API CALLS
 
         [HttpDelete]
@@ -131,7 +138,24 @@ namespace Dev_bloggr.Web.Controllers
                 return Json(new { success = true, message = "Blog deleted" });
             }
         }
-
+        [HttpPost]
+        public IActionResult AddComment([FromBody] AddCommentViewModel commentModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var comment = new Comment
+                {
+                    Content = commentModel.Content,
+                    CreatedAt = DateTime.Now,
+                    UserId = commentModel.UserId,
+                    BlogId = commentModel.BlogId,
+                };
+                _db.Comments.Add(comment);
+                _db.SaveChanges();
+                return Json(new { success = true, message = "comment added" });
+            }
+            return Json(new { success = false, message = "comment error" });
+        }
         #endregion
     }
 
