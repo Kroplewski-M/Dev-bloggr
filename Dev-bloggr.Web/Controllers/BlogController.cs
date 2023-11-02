@@ -156,6 +156,23 @@ namespace Dev_bloggr.Web.Controllers
             }
             return Json(new { success = false, message = "comment error" });
         }
+
+        [HttpDelete]
+        public IActionResult DeleteComment(int id)
+        {
+            var comment = _db.Comments.Include(b => b.User).FirstOrDefault(x => x.Id == id);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (comment.User.Id != userId || id == 0)
+            {
+                return Json(new { success = false, message = "comment deletion error" });
+            }
+            else
+            {
+                _db.Comments.Remove(comment);
+                _db.SaveChanges();
+                return Json(new { success = true, message = "comment deleted" });
+            }
+        }
         #endregion
     }
 

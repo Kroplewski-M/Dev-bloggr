@@ -36,6 +36,10 @@
             </div>
         </form>
     }
+    else
+    {
+        <input disabled class="form-control border" placeholder="You have to be logged in to comment!"></input>
+    }
     @if (Model.blog.Comments.Count == 0)
     {
         <p class="mt-5">There are no comments. Be the First the Comment!</p>
@@ -45,9 +49,15 @@
         <div class="mt-5 row d-flex flex-column">
             @foreach (var comment in Model.blog.Comments)
             {
-                <div class="card mb-4 col-6 ">
+                <div class="card mb-4 col-6 pt-2">
+                    @if (@comment.User.Id == @UserManager.GetUserId(this.User))
+                    {
+                        <div class="col-2">
+                            <button class="btn btn-danger" onclick="deleteComment('@comment.Id')">Delete</button>
+                        </div>
+                    }
                     <div class="card-body">
-                        <p>@comment.Content</p>
+                        <p class="fw-bold">@comment.Content</p>
 
                         <div class="d-flex justify-content-between">
                             <div class="d-flex flex-row align-items-center">
@@ -91,7 +101,34 @@
                     },
                 });
             });
-            //delete comment
         });
+        //delete comment
+        function deleteComment(commentId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Blog/DeleteComment/' + commentId,
+                        type: 'DELETE',
+                        success: function (data) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your comment has been deleted.',
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+        }
 </script>
 }
