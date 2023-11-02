@@ -121,11 +121,12 @@ namespace Dev_bloggr.Web.Controllers
         }
 
         #region API CALLS
-
         [HttpDelete]
         public IActionResult DeleteBlog(int? id)
         {
             var blogToBeDeleted = _db.Blogs.FirstOrDefault(b => b.Id == id);
+            var blogComments = _db.Comments.Where(u=>u.BlogId == blogToBeDeleted.Id).ToList();
+
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (blogToBeDeleted == null || blogToBeDeleted.UserId != userId)
             {
@@ -133,8 +134,17 @@ namespace Dev_bloggr.Web.Controllers
             }
             else
             {
+                //DELETE ALL COMMENTS ASSOCIATED TO THE BLOG
+                if (blogComments.Count > 0)
+                {
+                    foreach (var comment in blogComments)
+                    {
+                        _db.Comments.Remove(comment);
+                    }
+                }
                 _db.Blogs.Remove(blogToBeDeleted);
                 _db.SaveChanges();
+
                 return Json(new { success = true, message = "Blog deleted" });
             }
         }
@@ -156,7 +166,7 @@ namespace Dev_bloggr.Web.Controllers
             }
             return Json(new { success = false, message = "comment error" });
         }
-
+        
         [HttpDelete]
         public IActionResult DeleteComment(int id)
         {
