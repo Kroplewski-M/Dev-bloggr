@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Ignore app settings for different environments
 appsettings.json 
+Dev-bloggr.Web/appsettings.json
