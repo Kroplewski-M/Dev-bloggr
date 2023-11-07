@@ -50,7 +50,7 @@
         <div class="mt-5 row d-flex flex-column">
             @foreach (var comment in Model.blog.Comments)
             {
-                <div class="card mb-4 col-6 pt-2">
+                <div class="card mb-4 col-12 col-sm-6 pt-2">
                     @if (@comment.User.Id == @UserManager.GetUserId(this.User))
                     {
                         <div class="col-2">
